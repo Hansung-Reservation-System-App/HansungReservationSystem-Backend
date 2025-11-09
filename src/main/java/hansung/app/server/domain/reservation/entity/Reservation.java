@@ -13,11 +13,10 @@ import java.time.LocalDateTime;
 @Builder
 public class Reservation {
     private String id;
+    private String facilityId;
     private String userId;
     private int seatNumber;
-    private String status;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
-    private LocalDateTime createdAt;
 }
 

@@ -1,0 +1,42 @@
+package hansung.app.server.domain.user.controller;
+
+import hansung.app.server.domain.user.dto.request.LoginRequest;
+import hansung.app.server.domain.user.dto.request.RegisterRequest;
+import hansung.app.server.domain.user.dto.request.SearchPasswordRequest;
+import hansung.app.server.domain.user.dto.response.LoginResponse;
+import hansung.app.server.domain.user.service.UserService;
+import hansung.app.server.global.apiPayload.ApiResponse;
+import hansung.app.server.global.apiPayload.code.GeneralSucessCode;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/users")
+public class UserController {
+
+    private final UserService userService;
+
+    //회원가입
+    @PostMapping("/register")
+    public ResponseEntity<ApiResponse<String>> register(@RequestBody RegisterRequest request) throws Exception {
+        String userId = userService.register(request);
+
+        return ResponseEntity.ok(ApiResponse.onSucess(GeneralSucessCode.OK, userId));
+    }
+
+    //로그인
+    @PostMapping("/login")
+    public ResponseEntity<ApiResponse<LoginResponse>> login(@RequestBody LoginRequest request) throws Exception {
+        LoginResponse response = userService.login(request.getUserId(), request.getPassword());
+        return ResponseEntity.ok(ApiResponse.onSucess(GeneralSucessCode.OK, response));
+    }
+
+    //비밀번호 찾기
+    @PostMapping("/search-password")
+    public ResponseEntity<ApiResponse<String>> searchPassword(@RequestBody SearchPasswordRequest request)throws Exception {
+        String data = userService.searchPassword(request.getUserId(), request.getPhoneNumber());
+        return ResponseEntity.ok(ApiResponse.onSucess(GeneralSucessCode.OK, data));
+    }
+}
