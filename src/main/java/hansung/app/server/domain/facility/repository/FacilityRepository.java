@@ -1,16 +1,17 @@
 package hansung.app.server.domain.facility.repository;
 
 import com.google.api.core.ApiFuture;
-import com.google.cloud.firestore.DocumentSnapshot;
-import com.google.cloud.firestore.Firestore;
-import com.google.cloud.firestore.QueryDocumentSnapshot;
-import com.google.cloud.firestore.QuerySnapshot;
+import com.google.cloud.firestore.*;
+import hansung.app.server.domain.facility.dto.request.FacilityUpdateRequest;
 import hansung.app.server.domain.facility.entity.Facility;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 @RequiredArgsConstructor
@@ -34,7 +35,22 @@ public class FacilityRepository {
     }
 
     // currentCount, 혼잡도 업데이트
-    public void updateFacility(Facility facility) {
-        db.collection("facilities").document(facility.getId()).set(facility);
+    public void updateFacilityAsync(FacilityUpdateRequest updateRequest) {
+        Map<String, Object> updates = new HashMap<>();
+        updates.put("currentCount", updateRequest.getCurrentCount());
+        updates.put("congestionLevel", updateRequest.getCongestionLevel());
+        updates.put("updatedAt", updateRequest.getUpdatedAt());
+
+        ApiFuture<WriteResult> future = db.collection("facilities")
+                .document(updateRequest.getId())
+                .update(updates);
+
+        future.addListener(() -> {
+            try {
+                System.out.println("Updated: " + future.get().getUpdateTime());
+            } catch (Exception e) {
+                System.err.println("Firestore update failed: " + e.getMessage());
+            }
+        }, Runnable::run);
     }
 }
