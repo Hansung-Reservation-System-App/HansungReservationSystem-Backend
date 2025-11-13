@@ -15,7 +15,7 @@ import java.util.Map;
 
 @Repository
 @RequiredArgsConstructor
-public class FacilityRepository {
+public class  FacilityRepository {
     private final Firestore db;
 
     // 전체 시설 조회
