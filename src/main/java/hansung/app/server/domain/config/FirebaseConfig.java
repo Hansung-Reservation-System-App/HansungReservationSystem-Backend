@@ -19,21 +19,21 @@ public class FirebaseConfig {
     public void init() throws IOException {
         if (FirebaseApp.getApps().isEmpty()) {
             FileInputStream serviceAccount =
-                    new FileInputStream("src/main/resources/hansung-reservation-system-firebase-adminsdk-fbsvc-6db401b62e.json");
+                    new FileInputStream("src/main/resources/firebase/hansung-reservation-system-firebase-adminsdk-fbsvc-6db401b62e.json");
 
             FirebaseOptions options = FirebaseOptions.builder()
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                     .build();
 
             FirebaseApp.initializeApp(options);
-            System.out.println("🔥 FirebaseApp has been initialized successfully!");
+            System.out.println("FirebaseApp has been initialized successfully!");
         }
     }
 
     @Bean
     public Firestore firestore() {
         Firestore db = FirestoreClient.getFirestore();
-        System.out.println("✅ Firestore connected: " + db.getOptions().getProjectId());
+        System.out.println("Firestore connected: " + db.getOptions().getProjectId());
         return db;
     }
 }

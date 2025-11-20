@@ -6,8 +6,6 @@ import hansung.app.server.domain.user.entity.User;
 import hansung.app.server.domain.user.exception.UserException;
 import hansung.app.server.domain.user.exception.code.UserErrorCode;
 import hansung.app.server.domain.user.repository.UserRepository;
-import hansung.app.server.global.apiPayload.ApiResponse;
-import hansung.app.server.global.apiPayload.code.GeneralSucessCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +21,7 @@ public class UserService {
             throw new UserException(UserErrorCode.USER_ALREADY_EXISTS);
         }
 
-        User user = User.CreateUser(request);
+        User user = User.createUser(request);
 
         return userRepository.save(user);
     }

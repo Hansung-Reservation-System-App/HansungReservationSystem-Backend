@@ -1,21 +1,22 @@
 package hansung.app.server.domain.user.entity;
 
+import com.google.cloud.Timestamp;
 import hansung.app.server.domain.user.dto.request.RegisterRequest;
 import lombok.*;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User {
     private String id;
     private String name;
     private String userId;
     private String phoneNumber;
     private String password;
-    private LocalDateTime createdAt;
+    private Timestamp createdAt;
 
-    private User(String id, String name, String userId, String phoneNumber, String password, LocalDateTime createdAt) {
+    private User(String id, String name, String userId, String phoneNumber, String password, Timestamp createdAt) {
         this.id = id;
         this.name = name;
         this.userId = userId;
@@ -23,14 +24,14 @@ public class User {
         this.password = password;
         this.createdAt = createdAt;
     }
-    public static User CreateUser(RegisterRequest request){
+    public static User createUser(RegisterRequest request){
         return new User(
                 UUID.randomUUID().toString(),
                 request.getName(),
                 request.getUserId(),
                 request.getPhoneNumber(),
                 request.getPassword(),
-                LocalDateTime.now()
+                Timestamp.now()
                 );
     }
 }

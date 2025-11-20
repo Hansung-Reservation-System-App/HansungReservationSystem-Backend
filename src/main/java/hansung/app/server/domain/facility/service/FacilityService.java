@@ -1,5 +1,6 @@
 package hansung.app.server.domain.facility.service;
 
+import com.google.cloud.Timestamp;
 import hansung.app.server.domain.facility.dto.request.FacilityUpdateRequest;
 import hansung.app.server.domain.facility.dto.request.SensorUpdateRequest;
 import hansung.app.server.domain.facility.dto.response.FacilityDetailResponse;
@@ -11,7 +12,6 @@ import hansung.app.server.domain.facility.repository.FacilityRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,15 +71,14 @@ public class FacilityService {
             throw new FacilityException(FacilityErrorCode.INVALID_UPDATE_REQUEST);
         }
 
-        //센서 ID로 시설 찾기
-        List<Facility> facilities = facilityRepository.findAllFacilities();
+        // 센서 ID로 시설 찾기
+        Facility target = facilityRepository.findBySensorId(request.getSensorId());
 
-        Facility target = facilities.stream()
-                .filter(f -> f.getSensorId().equals(request.getSensorId()))
-                .findFirst()
-                .orElseThrow(() -> new FacilityException(FacilityErrorCode.SENSOR_NOT_MATCH));
+        if (target == null) {
+            throw new FacilityException(FacilityErrorCode.SENSOR_NOT_MATCH);
+        }
 
-        //혼잡도 계산 로직
+        // 혼잡도 계산 로직
         String congestion;
         double ratio = (double) request.getCurrentCount() / target.getMaxCount();
 
@@ -87,19 +86,19 @@ public class FacilityService {
         else if (ratio < 0.8) congestion = "보통";
         else congestion = "혼잡";
 
+        // FacilityUpdateRequest 생성
         FacilityUpdateRequest updateRequest = FacilityUpdateRequest.builder()
                 .id(target.getId())
                 .currentCount(request.getCurrentCount())
                 .congestionLevel(congestion)
-                .updatedAt(LocalDateTime.now().toString())
+                .updatedAt(Timestamp.now())
                 .build();
 
-        //업데이트
+        // 트랜잭션 내에서 업데이트
         try {
-            facilityRepository.updateFacilityAsync(updateRequest);
+            facilityRepository.updateFacility(updateRequest);  // 트랜잭션 사용
         } catch (Exception e) {
             throw new FacilityException(FacilityErrorCode.FIRESTORE_UPDATE_FAILED);
         }
-
     }
 }

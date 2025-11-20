@@ -1,10 +1,12 @@
 package hansung.app.server.domain.facility.entity;
 
+import com.google.cloud.Timestamp;
 import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Facility {
     private String id;
     private String name;
@@ -15,7 +17,7 @@ public class Facility {
     private String congestionLevel;
     private String operatingHours;
     private String sensorId;
-    private LocalDateTime updatedAt;
+    private Timestamp updatedAt;
     private String notice;
     private String rules;
     private String imageUrl;
@@ -29,7 +31,7 @@ public class Facility {
                     String congestionLevel,
                     String operatingHours,
                     String sensorId,
-                    LocalDateTime updatedAt,
+                     Timestamp updatedAt,
                     String notice,
                     String rules,
                     String imageUrl) {
