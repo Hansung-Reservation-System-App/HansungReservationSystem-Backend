@@ -1,7 +1,7 @@
 package hansung.app.server.domain.user.entity;
 
 import com.google.cloud.Timestamp;
-import hansung.app.server.domain.user.dto.request.RegisterRequest;
+import hansung.app.server.domain.user.dto.request.CreateUserRequest;
 import lombok.*;
 
 import java.util.UUID;
@@ -24,7 +24,7 @@ public class User {
         this.password = password;
         this.createdAt = createdAt;
     }
-    public static User createUser(RegisterRequest request){
+    public static User createUser(CreateUserRequest request){
         return new User(
                 UUID.randomUUID().toString(),
                 request.getName(),

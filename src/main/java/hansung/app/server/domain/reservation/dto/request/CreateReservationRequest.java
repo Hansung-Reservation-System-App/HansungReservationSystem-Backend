@@ -7,7 +7,7 @@ import lombok.*;
 
 @Getter
 @Builder
-public class ReservationRequestDto {
+public class CreateReservationRequest {
     private String facilityId;      // 시설 ID
     private String userId;          // 사용자 ID
     private int seatNumber;         // 좌석 번호

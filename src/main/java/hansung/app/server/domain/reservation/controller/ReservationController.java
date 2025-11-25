@@ -1,7 +1,7 @@
 package hansung.app.server.domain.reservation.controller;
 
 import hansung.app.server.domain.reservation.controllerDocs.ReservationControllerDocs;
-import hansung.app.server.domain.reservation.dto.request.ReservationRequestDto;
+import hansung.app.server.domain.reservation.dto.request.CreateReservationRequest;
 import hansung.app.server.domain.reservation.entity.Reservation;
 import hansung.app.server.domain.reservation.service.ReservationService;
 import hansung.app.server.global.apiPayload.ApiResponse;
@@ -20,7 +20,7 @@ public class ReservationController implements ReservationControllerDocs {
 
     // 예약 생성
     @PostMapping
-    public ApiResponse<Reservation> createReservation(@RequestBody ReservationRequestDto request) throws Exception {
+    public ApiResponse<Reservation> createReservation(@RequestBody CreateReservationRequest request) throws Exception {
         Reservation reservation = reservationService.saveReservation(request);
         return ApiResponse.onSucess(GeneralSucessCode.OK, reservation);
     }

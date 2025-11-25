@@ -1,6 +1,6 @@
 package hansung.app.server.domain.reservation.controllerDocs;
 
-import hansung.app.server.domain.reservation.dto.request.ReservationRequestDto;
+import hansung.app.server.domain.reservation.dto.request.CreateReservationRequest;
 import hansung.app.server.domain.reservation.entity.Reservation;
 import hansung.app.server.global.apiPayload.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,7 +12,7 @@ import java.util.List;
 public interface ReservationControllerDocs {
 
     @Operation(summary = "예약 생성", description = "좌석 번호, 사용자 ID, 시설 ID를 입력하여 예약을 생성합니다.")
-    ApiResponse<Reservation> createReservation(ReservationRequestDto request) throws Exception;
+    ApiResponse<Reservation> createReservation(CreateReservationRequest request) throws Exception;
 
     @Operation(summary = "예약 취소", description = "예약 ID를 통해 예약을 취소합니다.")
     ApiResponse<Reservation> cancelReservation(String reservationId) throws Exception;

@@ -1,8 +1,7 @@
 package hansung.app.server.domain.reservation.entity;
 
 import com.google.cloud.Timestamp;
-import hansung.app.server.domain.reservation.dto.request.ReservationRequestDto;
-import hansung.app.server.domain.user.entity.User;
+import hansung.app.server.domain.reservation.dto.request.CreateReservationRequest;
 import lombok.*;
 
 import java.util.UUID;
@@ -38,7 +37,7 @@ public class Reservation {
         this.isActive = isActive;
     }
 
-    public static Reservation createReservation(ReservationRequestDto dto) {
+    public static Reservation createReservation(CreateReservationRequest dto) {
         return new Reservation(
                 UUID.randomUUID().toString(),
                 dto.getFacilityId(),
