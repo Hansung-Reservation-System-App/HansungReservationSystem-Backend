@@ -59,7 +59,8 @@ public class FacilityService {
                 facility.getCongestionLevel(),
                 facility.getNotice(),
                 facility.getRules(),
-                facility.getImageUrl()
+                facility.getImageUrl(),
+                facility.isAvailableReservation()
         );
         return response;
     }

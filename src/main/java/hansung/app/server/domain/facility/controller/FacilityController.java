@@ -1,5 +1,6 @@
 package hansung.app.server.domain.facility.controller;
 
+import hansung.app.server.domain.facility.controllerDocs.FacilityControllerDocs;
 import hansung.app.server.domain.facility.dto.request.SensorUpdateRequest;
 import hansung.app.server.domain.facility.dto.response.FacilityDetailResponse;
 import hansung.app.server.domain.facility.dto.response.FacilityListResponse;
@@ -14,7 +15,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/facilities")
-public class FacilityController {
+public class FacilityController implements FacilityControllerDocs {
     private final FacilityService facilityService;
 
     //전체 시설 조회
