@@ -1,6 +1,6 @@
 package hansung.app.server.domain.user.service;
 
-import hansung.app.server.domain.user.dto.request.RegisterRequest;
+import hansung.app.server.domain.user.dto.request.CreateUserRequest;
 import hansung.app.server.domain.user.dto.response.LoginResponse;
 import hansung.app.server.domain.user.entity.User;
 import hansung.app.server.domain.user.exception.UserException;
@@ -15,7 +15,7 @@ public class UserService {
     private final UserRepository userRepository;
 
    //회원가입
-    public String register(RegisterRequest request) throws Exception {
+    public String register(CreateUserRequest request) throws Exception {
 
         if (userRepository.findByUserId(request.getUserId()) != null) {
             throw new UserException(UserErrorCode.USER_ALREADY_EXISTS);

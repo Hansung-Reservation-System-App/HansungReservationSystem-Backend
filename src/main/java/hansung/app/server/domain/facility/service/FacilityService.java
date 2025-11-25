@@ -64,42 +64,4 @@ public class FacilityService {
         );
         return response;
     }
-
-
-    //센서로부터 인원수, 혼잡도 업데이트 요청
-    public void updateCountBySensor(SensorUpdateRequest request) throws Exception {
-        if (request.getSensorId() == null || request.getCurrentCount() < 0) {
-            throw new FacilityException(FacilityErrorCode.INVALID_UPDATE_REQUEST);
-        }
-
-        // 센서 ID로 시설 찾기
-        Facility target = facilityRepository.findBySensorId(request.getSensorId());
-
-        if (target == null) {
-            throw new FacilityException(FacilityErrorCode.SENSOR_NOT_MATCH);
-        }
-
-        // 혼잡도 계산 로직
-        String congestion;
-        double ratio = (double) request.getCurrentCount() / target.getMaxCount();
-
-        if (ratio < 0.5) congestion = "여유";
-        else if (ratio < 0.8) congestion = "보통";
-        else congestion = "혼잡";
-
-        // FacilityUpdateRequest 생성
-        FacilityUpdateRequest updateRequest = FacilityUpdateRequest.builder()
-                .id(target.getId())
-                .currentCount(request.getCurrentCount())
-                .congestionLevel(congestion)
-                .updatedAt(Timestamp.now())
-                .build();
-
-        // 트랜잭션 내에서 업데이트
-        try {
-            facilityRepository.updateFacility(updateRequest);  // 트랜잭션 사용
-        } catch (Exception e) {
-            throw new FacilityException(FacilityErrorCode.FIRESTORE_UPDATE_FAILED);
-        }
-    }
 }

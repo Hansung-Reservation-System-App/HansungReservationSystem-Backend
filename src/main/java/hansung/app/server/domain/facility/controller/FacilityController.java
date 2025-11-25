@@ -33,13 +33,4 @@ public class FacilityController implements FacilityControllerDocs {
 
         return ApiResponse.onSucess(GeneralSucessCode.OK, facility);
     }
-
-
-    //센서로부터 인원수 업데이트 (IoT → 서버)
-    @PostMapping("/sensor/update")
-    public ApiResponse<String> updateBySensor(@RequestBody SensorUpdateRequest request) throws Exception {
-        facilityService.updateCountBySensor(request);
-
-        return ApiResponse.onSucess(GeneralSucessCode.OK, "시설 인원수 및 혼잡도 업데이트 완료");
-    }
 }

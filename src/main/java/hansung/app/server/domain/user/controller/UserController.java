@@ -2,14 +2,13 @@ package hansung.app.server.domain.user.controller;
 
 import hansung.app.server.domain.user.controllerDocs.UserControllerDocs;
 import hansung.app.server.domain.user.dto.request.LoginRequest;
-import hansung.app.server.domain.user.dto.request.RegisterRequest;
+import hansung.app.server.domain.user.dto.request.CreateUserRequest;
 import hansung.app.server.domain.user.dto.request.SearchPasswordRequest;
 import hansung.app.server.domain.user.dto.response.LoginResponse;
 import hansung.app.server.domain.user.service.UserService;
 import hansung.app.server.global.apiPayload.ApiResponse;
 import hansung.app.server.global.apiPayload.code.GeneralSucessCode;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,7 +20,7 @@ public class UserController implements UserControllerDocs {
 
     //회원가입
     @PostMapping("/register")
-    public ApiResponse<String> register(@RequestBody RegisterRequest request) throws Exception {
+    public ApiResponse<String> register(@RequestBody CreateUserRequest request) throws Exception {
         String userId = userService.register(request);
 
         return ApiResponse.onSucess(GeneralSucessCode.OK, userId);

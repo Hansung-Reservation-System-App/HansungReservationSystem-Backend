@@ -2,7 +2,7 @@ package hansung.app.server.domain.reservation.service;
 
 
 import com.google.cloud.Timestamp;
-import hansung.app.server.domain.reservation.dto.request.ReservationRequestDto;
+import hansung.app.server.domain.reservation.dto.request.CreateReservationRequest;
 import hansung.app.server.domain.reservation.entity.Reservation;
 import hansung.app.server.domain.reservation.exception.ReservationException;
 import hansung.app.server.domain.reservation.exception.code.ReservationErrorCode;
@@ -24,7 +24,7 @@ public class ReservationService {
     private final ReservationRepository reservationRepository;
 
     // 예약 생성
-    public Reservation saveReservation(ReservationRequestDto request) throws ExecutionException, InterruptedException {
+    public Reservation saveReservation(CreateReservationRequest request) throws ExecutionException, InterruptedException {
         try {
             Reservation reservation = Reservation.createReservation(request);
             reservationRepository.save(reservation);
@@ -87,7 +87,7 @@ public class ReservationService {
             reservationRepository.updateEndTime(reservationId, extendedEndTime);
 
             // DTO 재생성 후 엔티티 반환
-            ReservationRequestDto request = ReservationRequestDto.builder()
+            CreateReservationRequest request = CreateReservationRequest.builder()
                     .facilityId(reservation.getFacilityId())
                     .userId(reservation.getUserId())
                     .seatNumber(reservation.getSeatNumber())

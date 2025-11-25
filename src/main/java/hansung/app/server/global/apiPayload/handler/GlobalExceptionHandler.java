@@ -4,7 +4,6 @@ import hansung.app.server.global.apiPayload.ApiResponse;
 import hansung.app.server.global.apiPayload.code.BaseErrorCode;
 import hansung.app.server.global.apiPayload.code.GeneralErrorCode;
 import hansung.app.server.global.apiPayload.exception.GeneralException;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
