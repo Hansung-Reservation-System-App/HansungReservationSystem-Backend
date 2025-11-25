@@ -1,22 +1,56 @@
 package hansung.app.server.domain.reservation.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.google.cloud.Timestamp;
+import hansung.app.server.domain.reservation.dto.request.ReservationRequestDto;
+import hansung.app.server.domain.user.entity.User;
+import lombok.*;
 
-import java.time.LocalDateTime;
+import java.util.UUID;
 
-@Data
+
+@Getter
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
 public class Reservation {
-    private String id;
-    private String facilityId;
-    private String userId;
-    private int seatNumber;
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
+    private String id;                 // 예약 ID
+    private String facilityId;         // 시설 ID (시설 엔티티와 연결)
+    private String userId;             // 사용자 ID
+    private int seatNumber;            // 좌석 번호
+    private Timestamp startTime;       // 예약 시작 시간
+    private Timestamp endTime;         // 예약 종료 시간
+    private String status;             // 예약 상태 (예: "완료", "진행 중", "취소")
+    private boolean isActive;          // 예약 활성화 여부 (true / false)
+
+    private Reservation(String id,
+                       String facilityId,
+                       String userId,
+                       int seatNumber,
+                       Timestamp startTime,
+                       Timestamp endTime,
+                       String status,
+                       boolean isActive) {
+        this.id = id;
+        this.facilityId = facilityId;
+        this.userId = userId;
+        this.seatNumber = seatNumber;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.status = status;
+        this.isActive = isActive;
+    }
+
+    public static Reservation createReservation(ReservationRequestDto dto) {
+        return new Reservation(
+                UUID.randomUUID().toString(),
+                dto.getFacilityId(),
+                dto.getUserId(),
+                dto.getSeatNumber(),
+                dto.getStartTime(),
+                dto.getEndTime(),
+                "진행 중",
+                true
+        );
+    }
 }
+
+
 

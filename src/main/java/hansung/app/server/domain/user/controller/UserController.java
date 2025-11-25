@@ -1,5 +1,6 @@
 package hansung.app.server.domain.user.controller;
 
+import hansung.app.server.domain.user.controllerDocs.UserControllerDocs;
 import hansung.app.server.domain.user.dto.request.LoginRequest;
 import hansung.app.server.domain.user.dto.request.RegisterRequest;
 import hansung.app.server.domain.user.dto.request.SearchPasswordRequest;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/users")
-public class UserController {
+public class UserController implements UserControllerDocs {
 
     private final UserService userService;
 

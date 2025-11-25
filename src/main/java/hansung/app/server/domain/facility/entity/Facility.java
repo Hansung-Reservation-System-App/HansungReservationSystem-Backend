@@ -3,8 +3,6 @@ package hansung.app.server.domain.facility.entity;
 import com.google.cloud.Timestamp;
 import lombok.*;
 
-import java.time.LocalDateTime;
-
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Facility {
@@ -21,6 +19,7 @@ public class Facility {
     private String notice;
     private String rules;
     private String imageUrl;
+    private boolean isAvailableReservation; // 예약 가능 여부
 
     private Facility(String id,
                     String name,
@@ -34,7 +33,8 @@ public class Facility {
                      Timestamp updatedAt,
                     String notice,
                     String rules,
-                    String imageUrl) {
+                    String imageUrl,
+                     boolean isAvailable) {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -48,5 +48,6 @@ public class Facility {
         this.notice = notice;
         this.rules = rules;
         this.imageUrl = imageUrl;
+        this.isAvailableReservation = isAvailable;
     }
 }
