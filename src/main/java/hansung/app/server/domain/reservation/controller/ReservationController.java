@@ -45,4 +45,11 @@ public class ReservationController implements ReservationControllerDocs {
         Reservation extendedReservation = reservationService.extendReservation(reservationId);
         return ApiResponse.onSucess(GeneralSucessCode.OK, extendedReservation);
     }
+
+    //마이 예약 내역
+    @GetMapping("/my/{userId}")
+    public ApiResponse<List<Reservation>> getMyReservations(@PathVariable String userId) {
+        List<Reservation> reservations = reservationService.getMyReservations(userId);
+        return ApiResponse.onSucess(GeneralSucessCode.OK, reservations);
+    }
 }

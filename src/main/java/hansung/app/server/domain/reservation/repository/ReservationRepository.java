@@ -63,5 +63,48 @@ public class ReservationRepository {
         DocumentReference reservationRef = db.collection("reservations").document(reservationId);
         return reservationRef.update("endTime", newEndTime);  // 종료 시간 업데이트
     }
+
+    //사용자 ID로 예약 정보 조회
+    public List<Reservation> findByUserId(String userId) throws Exception {
+        ApiFuture<QuerySnapshot> future = db.collection("reservations")
+                .whereEqualTo("userId", userId)
+                .get();
+
+        List<Reservation> result = new ArrayList<>();
+        for (QueryDocumentSnapshot doc : future.get().getDocuments()) {
+            result.add(doc.toObject(Reservation.class));
+        }
+        return result;
+    }
+
+    // 시간 만료된 예약들 자동 취소
+    public void autoCancelExpiredReservations(Timestamp now) throws Exception {
+        // endTime < now 이면서 status == "진행 중" 인 예약만 조회
+        ApiFuture<QuerySnapshot> future = db.collection("reservations")
+                .whereLessThan("endTime", now)
+                .whereEqualTo("status", "진행 중")
+                .get();
+
+        List<QueryDocumentSnapshot> docs = future.get().getDocuments();
+
+        if (docs.isEmpty()) {
+            return; // 완료할 예약 없음
+        }
+
+        WriteBatch batch = db.batch();
+
+        for (QueryDocumentSnapshot doc : docs) {
+            DocumentReference ref = doc.getReference();
+            // status만 "완료"로, isActive는 false로
+            batch.update(ref,
+                    "status", "완료",
+                    "isActive", false
+            );
+        }
+
+        // 배치 커밋 (동기적으로 기다림)
+        batch.commit().get();
+    }
+
 }
 

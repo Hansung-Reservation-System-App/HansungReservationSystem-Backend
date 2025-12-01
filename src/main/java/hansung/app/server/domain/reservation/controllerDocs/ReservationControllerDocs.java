@@ -5,6 +5,7 @@ import hansung.app.server.domain.reservation.entity.Reservation;
 import hansung.app.server.global.apiPayload.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -22,4 +23,7 @@ public interface ReservationControllerDocs {
 
     @Operation(summary = "예약 연장", description = "기존 예약 종료 시간에서 2시간 연장합니다.")
     ApiResponse<Reservation> extendReservation(String reservationId) throws Exception;
+
+    @Operation(summary = "마이 예약 내역", description = "userId로 내가 예약했던 정보들을 조회합니다.")
+    public ApiResponse<List<Reservation>> getMyReservations(@PathVariable String userId);
 }

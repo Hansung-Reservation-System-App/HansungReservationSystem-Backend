@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 @Repository
@@ -31,6 +32,12 @@ public class UserRepository {
     public List<QueryDocumentSnapshot> findAll() throws ExecutionException, InterruptedException {
         ApiFuture<QuerySnapshot> future = db.collection("users").get();
         return future.get().getDocuments();
+    }
+
+    // 회원 정보 일부 필드 업데이트
+    public void updateUserFields(String userId, Map<String, Object> fields) throws Exception {
+        DocumentReference ref = db.collection("users").document(userId);
+        ref.update(fields).get();
     }
 }
 

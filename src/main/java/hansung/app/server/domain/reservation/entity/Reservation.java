@@ -25,7 +25,7 @@ public class Reservation {
                        int seatNumber,
                        Timestamp startTime,
                        Timestamp endTime,
-                       String status,
+                       String status,   // ["진행중", "취소", "완료"]
                        boolean isActive) {
         this.id = id;
         this.facilityId = facilityId;
