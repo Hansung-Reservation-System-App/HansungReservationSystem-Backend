@@ -19,7 +19,10 @@ public enum ReservationErrorCode implements BaseErrorCode {
     RESERVATION_EXTEND_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "R5003", "예약 연장 중 오류가 발생했습니다."),
     INVALID_SEAT_NUMBER(HttpStatus.BAD_REQUEST, "R4004", "잘못된 좌석 번호입니다."),
     RESERVATION_CONFLICT(HttpStatus.CONFLICT, "R4005", "다른 예약과 시간이 겹칩니다."),
-    INVALID_RESERVATION_ID(HttpStatus.BAD_REQUEST, "R4006", "잘못된 예약 ID입니다.");
+    INVALID_RESERVATION_ID(HttpStatus.BAD_REQUEST, "R4006", "잘못된 예약 ID입니다."),
+    AUTO_CANCEL_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "R5004", "만료된 예약 자동 취소 중 오류가 발생했습니다."),
+    RESERVATION_QUERY_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "R5004", "예약 조회 중 오류가 발생했습니다.");
+
 
     private final HttpStatus status;
     private final String code;

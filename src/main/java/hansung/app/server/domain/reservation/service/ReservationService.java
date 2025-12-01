@@ -8,6 +8,8 @@ import hansung.app.server.domain.reservation.exception.ReservationException;
 import hansung.app.server.domain.reservation.exception.code.ReservationErrorCode;
 import hansung.app.server.domain.reservation.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -19,6 +21,7 @@ import java.util.concurrent.ExecutionException;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ReservationService {
 
     private final ReservationRepository reservationRepository;
@@ -98,6 +101,26 @@ public class ReservationService {
             return Reservation.createReservation(request);
         } catch (Exception e) {
             throw new ReservationException(ReservationErrorCode.RESERVATION_EXTEND_FAILED);
+        }
+    }
+
+    // 마이 예약 내역
+    public List<Reservation> getMyReservations(String userId) {
+        try {
+            return reservationRepository.findByUserId(userId);
+        } catch (Exception e) {
+            throw new ReservationException(ReservationErrorCode.RESERVATION_QUERY_FAILED);
+        }
+    }
+
+    @Scheduled(cron = "0 */5 * * * ?")  // 매 5분마다 실행 (00,05,10,15,...분 0초)
+    public void autoCancelExpiredReservations() {
+        try {
+            Timestamp now = Timestamp.now();
+            reservationRepository.autoCancelExpiredReservations(now);
+        } catch (Exception e) {
+            log.error("[Scheduler] 만료 예약 자동 취소 중 오류 발생: {}", e.getMessage(), e);
+            throw new ReservationException(ReservationErrorCode.AUTO_CANCEL_FAILED);
         }
     }
 }

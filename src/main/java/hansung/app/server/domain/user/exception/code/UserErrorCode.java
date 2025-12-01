@@ -14,7 +14,8 @@ public enum UserErrorCode implements BaseErrorCode {
     USER_ALREADY_EXISTS(HttpStatus.CONFLICT, "U4002", "이미 존재하는 회원입니다."),
     PASSWORD_MISMATCH(HttpStatus.BAD_REQUEST, "U4003", "비밀번호가 일치하지 않습니다."),
     PHONE_MISMATCH(HttpStatus.BAD_REQUEST, "U4004", "전화번호가 일치하지 않습니다."),
-    USER_ID_NOT_FOUND(HttpStatus.NOT_FOUND, "U4005", "존재하지 않는 아이디입니다.");
+    USER_ID_NOT_FOUND(HttpStatus.NOT_FOUND, "U4005", "존재하지 않는 아이디입니다."),
+    USER_UPDATE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "U5000", "회원 정보 수정 중 오류가 발생했습니다.");
 
     private final HttpStatus status;
     private final String code;
