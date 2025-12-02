@@ -46,7 +46,7 @@ public class ReservationService {
             }
 
             reservationRepository.updateStatus(reservationId, "취소");
-            reservationRepository.delete(reservationId);
+            //reservationRepository.delete(reservationId);
             return reservation;
         } catch (Exception e) {
             throw new ReservationException(ReservationErrorCode.RESERVATION_CANCEL_FAILED);

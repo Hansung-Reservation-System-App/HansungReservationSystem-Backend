@@ -77,7 +77,7 @@ public class ReservationRepository {
         return result;
     }
 
-    // 시간 만료된 예약들 자동 취소
+    // 시간 만료된 예약들 자동 완료
     public void autoCancelExpiredReservations(Timestamp now) throws Exception {
         // endTime < now 이면서 status == "진행 중" 인 예약만 조회
         ApiFuture<QuerySnapshot> future = db.collection("reservations")
@@ -98,7 +98,7 @@ public class ReservationRepository {
             // status만 "완료"로, isActive는 false로
             batch.update(ref,
                     "status", "완료",
-                    "isActive", false
+                    "active", false
             );
         }
 
