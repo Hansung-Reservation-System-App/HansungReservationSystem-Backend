@@ -19,7 +19,7 @@ public class Facility {
     private String notice;
     private String rules;
     private String imageUrl;
-    private boolean isAvailableReservation; // 예약 가능 여부
+    private boolean availableReservation; // 예약 가능 여부
 
     private Facility(String id,
                     String name,
@@ -34,7 +34,7 @@ public class Facility {
                     String notice,
                     String rules,
                     String imageUrl,
-                     boolean isAvailable) {
+                     boolean availableReservation) {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -48,6 +48,6 @@ public class Facility {
         this.notice = notice;
         this.rules = rules;
         this.imageUrl = imageUrl;
-        this.isAvailableReservation = isAvailable;
+        this.availableReservation = availableReservation;
     }
 }

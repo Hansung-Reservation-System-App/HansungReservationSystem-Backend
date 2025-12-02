@@ -1,6 +1,5 @@
 package hansung.app.server.domain.facility.controllerDocs;
 
-import hansung.app.server.domain.facility.dto.request.SensorUpdateRequest;
 import hansung.app.server.domain.facility.dto.response.FacilityDetailResponse;
 import hansung.app.server.domain.facility.dto.response.FacilityListResponse;
 import hansung.app.server.global.apiPayload.ApiResponse;

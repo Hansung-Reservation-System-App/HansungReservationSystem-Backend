@@ -1,8 +1,5 @@
 package hansung.app.server.domain.facility.service;
 
-import com.google.cloud.Timestamp;
-import hansung.app.server.domain.facility.dto.request.FacilityUpdateRequest;
-import hansung.app.server.domain.facility.dto.request.SensorUpdateRequest;
 import hansung.app.server.domain.facility.dto.response.FacilityDetailResponse;
 import hansung.app.server.domain.facility.dto.response.FacilityListResponse;
 import hansung.app.server.domain.facility.entity.Facility;
@@ -60,7 +57,7 @@ public class FacilityService {
                 facility.getNotice(),
                 facility.getRules(),
                 facility.getImageUrl(),
-                facility.isAvailableReservation()
+                facility.isAvailableReservation()  //Lombok이 boolean 타입은 getter가 아닌 is형식
         );
         return response;
     }

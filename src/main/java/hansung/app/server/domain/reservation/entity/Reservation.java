@@ -17,7 +17,7 @@ public class Reservation {
     private Timestamp startTime;       // 예약 시작 시간
     private Timestamp endTime;         // 예약 종료 시간
     private String status;             // 예약 상태 (예: "완료", "진행 중", "취소")
-    private boolean isActive;          // 예약 활성화 여부 (true / false)
+    private boolean active;            // 예약 활성화 여부 (true / false)
 
     private Reservation(String id,
                        String facilityId,
@@ -26,7 +26,7 @@ public class Reservation {
                        Timestamp startTime,
                        Timestamp endTime,
                        String status,   // ["진행중", "취소", "완료"]
-                       boolean isActive) {
+                       boolean active) {
         this.id = id;
         this.facilityId = facilityId;
         this.userId = userId;
@@ -34,7 +34,7 @@ public class Reservation {
         this.startTime = startTime;
         this.endTime = endTime;
         this.status = status;
-        this.isActive = isActive;
+        this.active = active;
     }
 
     public static Reservation createReservation(CreateReservationRequest dto) {

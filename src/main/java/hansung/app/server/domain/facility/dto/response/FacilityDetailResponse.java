@@ -19,6 +19,6 @@ public class FacilityDetailResponse {
     private String notice;
     private String rules;
     private String imageUrl;
-    private boolean isAvailable;
+    private boolean availableReservation;
 }
 
