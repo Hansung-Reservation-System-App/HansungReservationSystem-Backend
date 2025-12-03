@@ -2,6 +2,9 @@ package hansung.app.server.domain.reservation.service;
 
 
 import com.google.cloud.Timestamp;
+import hansung.app.server.domain.facility.entity.Facility;
+import hansung.app.server.domain.facility.exception.code.FacilityErrorCode;
+import hansung.app.server.domain.facility.repository.FacilityRepository;
 import hansung.app.server.domain.reservation.dto.request.CreateReservationRequest;
 import hansung.app.server.domain.reservation.entity.Reservation;
 import hansung.app.server.domain.reservation.exception.ReservationException;
@@ -25,13 +28,33 @@ import java.util.concurrent.ExecutionException;
 public class ReservationService {
 
     private final ReservationRepository reservationRepository;
+    private final FacilityRepository facilityRepository;
 
     // 예약 생성
     public Reservation saveReservation(CreateReservationRequest request) throws ExecutionException, InterruptedException {
         try {
+            //같은 시설 + 좌석에 이미 진행 중 예약 있는지 체크
+            if (reservationRepository.existsActiveReservation(request.getFacilityId(), request.getSeatNumber())) {
+                throw new ReservationException(ReservationErrorCode.SEAT_ALREADY_RESERVED);
+            }
+
+            //만석 여부 체크
+            Facility facility = facilityRepository.findById(request.getFacilityId());
+            if (facility.getCurrentCount() >= facility.getMaxCount()) {
+                throw new ReservationException(FacilityErrorCode.FACILITY_FULL);
+            }
+
+            //예약 생성
             Reservation reservation = Reservation.createReservation(request);
             reservationRepository.save(reservation);
+
+            //시설 현재 인원 +1
+            facilityRepository.increaseCurrentCount(request.getFacilityId());
+            
             return reservation;
+        }catch (ReservationException e) {
+            // 도메인 예외는 그대로 던져서 컨트롤러에서 ApiResponse로 래핑
+            throw e;
         } catch (Exception e) {
             throw new ReservationException(ReservationErrorCode.RESERVATION_CREATE_FAILED);
         }
@@ -46,6 +69,7 @@ public class ReservationService {
             }
 
             reservationRepository.updateStatus(reservationId, "취소");
+            facilityRepository.decreaseCurrentCount(reservation.getFacilityId());
             //reservationRepository.delete(reservationId);
             return reservation;
         } catch (Exception e) {
@@ -117,7 +141,20 @@ public class ReservationService {
     public void autoCancelExpiredReservations() {
         try {
             Timestamp now = Timestamp.now();
-            reservationRepository.autoCancelExpiredReservations(now);
+            List<Reservation> reservations = reservationRepository.autoCancelExpiredReservations(now);
+
+            if (reservations.isEmpty()) {
+                return; // 처리할 예약 없음
+            }
+
+            //각 예약의 facilityId 기준으로 현재 인원 감소
+            for (Reservation r : reservations) {
+                String facilityId = r.getFacilityId();
+                if (facilityId != null && !facilityId.isEmpty()) {
+                    facilityRepository.decreaseCurrentCount(facilityId);
+                }
+            }
+
         } catch (Exception e) {
             log.error("[Scheduler] 만료 예약 자동 취소 중 오류 발생: {}", e.getMessage(), e);
             throw new ReservationException(ReservationErrorCode.AUTO_CANCEL_FAILED);

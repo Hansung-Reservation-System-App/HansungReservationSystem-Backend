@@ -112,5 +112,38 @@ public class FacilityRepository {
             throw new FacilityException(FacilityErrorCode.FIRESTORE_UPDATE_FAILED);  // 에러 코드 업데이트
         }
     }
+
+    //예약 생성 시 currentCount +1
+    public ApiFuture<WriteResult> increaseCurrentCount(String facilityId) throws Exception {
+        ApiFuture<QuerySnapshot> future = db.collection("facilities")
+                .whereEqualTo("id", facilityId)
+                .limit(1)
+                .get();
+
+        List<QueryDocumentSnapshot> docs = future.get().getDocuments();
+        if (docs.isEmpty()) {
+            throw new FacilityException(FacilityErrorCode.FACILITY_NOT_FOUND);
+        }
+
+        // 2) 찾은 문서에 대해 currentCount +1
+        DocumentReference ref = docs.get(0).getReference();
+        return ref.update("currentCount", FieldValue.increment(1));
+    }
+
+    //예약 취소 / 종료 시 currentCount -1
+    public ApiFuture<WriteResult> decreaseCurrentCount(String facilityId) throws Exception {
+        ApiFuture<QuerySnapshot> future = db.collection("facilities")
+                .whereEqualTo("id", facilityId)
+                .limit(1)
+                .get();
+
+        List<QueryDocumentSnapshot> docs = future.get().getDocuments();
+        if (docs.isEmpty()) {
+            throw new FacilityException(FacilityErrorCode.FACILITY_NOT_FOUND);
+        }
+
+        DocumentReference ref = docs.get(0).getReference();
+        return ref.update("currentCount", FieldValue.increment(-1));
+    }
 }
 

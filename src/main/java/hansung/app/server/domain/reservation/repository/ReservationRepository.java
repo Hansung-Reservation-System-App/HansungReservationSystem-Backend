@@ -77,8 +77,20 @@ public class ReservationRepository {
         return result;
     }
 
+    // 해당 시설 + 좌석에 "진행 중" 예약이 이미 있는지 확인
+    public boolean existsActiveReservation(String facilityId, int seatNumber) throws Exception {
+        ApiFuture<QuerySnapshot> future = db.collection("reservations")
+                .whereEqualTo("facilityId", facilityId)
+                .whereEqualTo("seatNumber", seatNumber)
+                .whereEqualTo("status", "진행 중")   // 또는 active == true 로 바꿔도 됨
+                .get();
+
+        List<QueryDocumentSnapshot> docs = future.get().getDocuments();
+        return !docs.isEmpty();   // 하나라도 있으면 중복 예약
+    }
+
     // 시간 만료된 예약들 자동 완료
-    public void autoCancelExpiredReservations(Timestamp now) throws Exception {
+    public List<Reservation> autoCancelExpiredReservations(Timestamp now) throws Exception {
         // endTime < now 이면서 status == "진행 중" 인 예약만 조회
         ApiFuture<QuerySnapshot> future = db.collection("reservations")
                 .whereLessThan("endTime", now)
@@ -88,12 +100,16 @@ public class ReservationRepository {
         List<QueryDocumentSnapshot> docs = future.get().getDocuments();
 
         if (docs.isEmpty()) {
-            return; // 완료할 예약 없음
+            return List.of(); // 완료할 예약 없음
         }
 
         WriteBatch batch = db.batch();
+        List<Reservation> expiredReservations = new ArrayList<>();
 
         for (QueryDocumentSnapshot doc : docs) {
+            Reservation reservation = doc.toObject(Reservation.class);
+            expiredReservations.add(reservation);
+
             DocumentReference ref = doc.getReference();
             // status만 "완료"로, isActive는 false로
             batch.update(ref,
@@ -104,7 +120,7 @@ public class ReservationRepository {
 
         // 배치 커밋 (동기적으로 기다림)
         batch.commit().get();
+        return expiredReservations;
     }
-
 }
 
