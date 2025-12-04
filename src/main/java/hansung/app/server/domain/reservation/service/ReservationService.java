@@ -6,6 +6,7 @@ import hansung.app.server.domain.facility.entity.Facility;
 import hansung.app.server.domain.facility.exception.code.FacilityErrorCode;
 import hansung.app.server.domain.facility.repository.FacilityRepository;
 import hansung.app.server.domain.reservation.dto.request.CreateReservationRequest;
+import hansung.app.server.domain.reservation.dto.response.MyReservationResponse;
 import hansung.app.server.domain.reservation.entity.Reservation;
 import hansung.app.server.domain.reservation.exception.ReservationException;
 import hansung.app.server.domain.reservation.exception.code.ReservationErrorCode;
@@ -21,6 +22,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+
+import static hansung.app.server.domain.reservation.dto.response.MyReservationResponse.createResponseDto;
 
 @Service
 @RequiredArgsConstructor
@@ -137,9 +140,18 @@ public class ReservationService {
     }
 
     // 마이 예약 내역
-    public List<Reservation> getMyReservations(String userId) {
+    public List<MyReservationResponse> getMyReservations(String userId) {
         try {
-            return reservationRepository.findByUserId(userId);
+            List<Reservation> reservations = reservationRepository.findByUserId(userId);
+            List<MyReservationResponse> result = new ArrayList<>();
+
+            for (Reservation reservation : reservations) {
+                Facility facility = facilityRepository.findById(reservation.getFacilityId());
+                result.add(MyReservationResponse.createResponseDto(reservation, facility));
+            }
+
+            return result;
+
         } catch (Exception e) {
             throw new ReservationException(ReservationErrorCode.RESERVATION_QUERY_FAILED);
         }
