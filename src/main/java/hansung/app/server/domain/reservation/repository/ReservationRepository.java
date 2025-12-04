@@ -89,6 +89,18 @@ public class ReservationRepository {
         return !docs.isEmpty();   // 하나라도 있으면 중복 예약
     }
 
+    // 해당 유저가 해당 시설에 "진행 중" 예약을 이미 가지고 있는지 확인
+    public boolean existsActiveReservationByUserAndFacility(String userId, String facilityId) throws Exception {
+        ApiFuture<QuerySnapshot> future = db.collection("reservations")
+                .whereEqualTo("userId", userId)
+                .whereEqualTo("facilityId", facilityId)
+                .whereEqualTo("status", "진행 중")   // active == true 써도 됨
+                .get();
+
+        List<QueryDocumentSnapshot> docs = future.get().getDocuments();
+        return !docs.isEmpty();  // 하나라도 있으면 이미 예약 있음
+    }
+
     // 시간 만료된 예약들 자동 완료
     public List<Reservation> autoCancelExpiredReservations(Timestamp now) throws Exception {
         // endTime < now 이면서 status == "진행 중" 인 예약만 조회
