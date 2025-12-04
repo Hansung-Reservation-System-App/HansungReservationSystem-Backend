@@ -20,7 +20,8 @@ public enum ReservationErrorCode implements BaseErrorCode {
     INVALID_RESERVATION_ID(HttpStatus.BAD_REQUEST, "R4006", "잘못된 예약 ID입니다."),
     AUTO_CANCEL_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "R5004", "만료된 예약 자동 취소 중 오류가 발생했습니다."),
     RESERVATION_QUERY_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "R5004", "예약 조회 중 오류가 발생했습니다."),
-    SEAT_ALREADY_RESERVED(HttpStatus.CONFLICT, "R4009", "이미 예약된 좌석입니다.");
+    SEAT_ALREADY_RESERVED(HttpStatus.CONFLICT, "R4009", "이미 예약된 좌석입니다."),
+    USER_ALREADY_RESERVED_IN_FACILITY(HttpStatus.CONFLICT, "R4092", "해당 시설에 이미 진행 중인 예약이 있습니다."),;
 
 
     private final HttpStatus status;

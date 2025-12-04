@@ -33,6 +33,14 @@ public class ReservationService {
     // 예약 생성
     public Reservation saveReservation(CreateReservationRequest request) throws ExecutionException, InterruptedException {
         try {
+            // 한 사람이 같은 시설에 이미 진행 중 예약 있는지 체크
+            if (reservationRepository.existsActiveReservationByUserAndFacility(
+                    request.getUserId(),
+                    request.getFacilityId()
+            )) {
+                throw new ReservationException(ReservationErrorCode.USER_ALREADY_RESERVED_IN_FACILITY);
+            }
+
             //같은 시설 + 좌석에 이미 진행 중 예약 있는지 체크
             if (reservationRepository.existsActiveReservation(request.getFacilityId(), request.getSeatNumber())) {
                 throw new ReservationException(ReservationErrorCode.SEAT_ALREADY_RESERVED);
