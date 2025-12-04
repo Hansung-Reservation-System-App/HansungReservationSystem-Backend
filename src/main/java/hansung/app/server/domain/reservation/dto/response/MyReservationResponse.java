@@ -19,6 +19,7 @@ public class MyReservationResponse {
     private Timestamp startTime;
     private Timestamp endTime;
     private String status;
+    private boolean active;
 
     public static MyReservationResponse createResponseDto(Reservation reservation, Facility facility) {
         return new MyReservationResponse(
@@ -29,7 +30,8 @@ public class MyReservationResponse {
                 reservation.getSeatNumber(),
                 reservation.getStartTime(),
                 reservation.getEndTime(),
-                reservation.getStatus()
+                reservation.getStatus(),
+                reservation.isActive()
         );
     }
 }
