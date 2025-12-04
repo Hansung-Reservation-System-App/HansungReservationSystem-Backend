@@ -2,6 +2,7 @@ package hansung.app.server.domain.reservation.controller;
 
 import hansung.app.server.domain.reservation.controllerDocs.ReservationControllerDocs;
 import hansung.app.server.domain.reservation.dto.request.CreateReservationRequest;
+import hansung.app.server.domain.reservation.dto.response.MyReservationResponse;
 import hansung.app.server.domain.reservation.entity.Reservation;
 import hansung.app.server.domain.reservation.service.ReservationService;
 import hansung.app.server.global.apiPayload.ApiResponse;
@@ -48,8 +49,8 @@ public class ReservationController implements ReservationControllerDocs {
 
     //마이 예약 내역
     @GetMapping("/my/{userId}")
-    public ApiResponse<List<Reservation>> getMyReservations(@PathVariable String userId) {
-        List<Reservation> reservations = reservationService.getMyReservations(userId);
+    public ApiResponse<List<MyReservationResponse>> getMyReservations(@PathVariable String userId) {
+        List<MyReservationResponse> reservations = reservationService.getMyReservations(userId);
         return ApiResponse.onSucess(GeneralSucessCode.OK, reservations);
     }
 }
