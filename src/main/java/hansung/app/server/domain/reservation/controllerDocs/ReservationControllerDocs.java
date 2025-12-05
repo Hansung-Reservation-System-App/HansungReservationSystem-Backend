@@ -2,6 +2,7 @@ package hansung.app.server.domain.reservation.controllerDocs;
 
 import hansung.app.server.domain.reservation.dto.request.CreateReservationRequest;
 import hansung.app.server.domain.reservation.dto.response.MyReservationResponse;
+import hansung.app.server.domain.reservation.dto.response.SeatReservationResponse;
 import hansung.app.server.domain.reservation.entity.Reservation;
 import hansung.app.server.global.apiPayload.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,7 +21,7 @@ public interface ReservationControllerDocs {
     ApiResponse<Reservation> cancelReservation(String reservationId) throws Exception;
 
     @Operation(summary = "시설별 예약된 좌석 조회", description = "특정 시설의 이미 예약된 좌석 번호 목록을 조회합니다.")
-    ApiResponse<List<Integer>> getReservationSeats(String facilityId) throws Exception;
+    ApiResponse<List<SeatReservationResponse>> getReservationSeats(String facilityId) throws Exception;
 
     @Operation(summary = "예약 연장", description = "기존 예약 종료 시간에서 2시간 연장합니다.")
     ApiResponse<Reservation> extendReservation(String reservationId) throws Exception;

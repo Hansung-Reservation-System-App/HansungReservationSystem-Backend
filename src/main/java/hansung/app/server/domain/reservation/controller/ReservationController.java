@@ -3,6 +3,7 @@ package hansung.app.server.domain.reservation.controller;
 import hansung.app.server.domain.reservation.controllerDocs.ReservationControllerDocs;
 import hansung.app.server.domain.reservation.dto.request.CreateReservationRequest;
 import hansung.app.server.domain.reservation.dto.response.MyReservationResponse;
+import hansung.app.server.domain.reservation.dto.response.SeatReservationResponse;
 import hansung.app.server.domain.reservation.entity.Reservation;
 import hansung.app.server.domain.reservation.service.ReservationService;
 import hansung.app.server.global.apiPayload.ApiResponse;
@@ -35,8 +36,8 @@ public class ReservationController implements ReservationControllerDocs {
 
     // 시설별 예약 좌석 조회
     @GetMapping("/seats/{facilityId}")
-    public ApiResponse<List<Integer>> getReservationSeats(@PathVariable String facilityId) throws Exception {
-        List<Integer> reservedSeats = reservationService.getReservationSeats(facilityId);
+    public ApiResponse<List<SeatReservationResponse>> getReservationSeats(@PathVariable String facilityId) throws Exception {
+        List<SeatReservationResponse> reservedSeats = reservationService.getReservationSeats(facilityId);
         return ApiResponse.onSucess(GeneralSucessCode.OK, reservedSeats);
     }
 

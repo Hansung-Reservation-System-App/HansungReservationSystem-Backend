@@ -7,6 +7,7 @@ import hansung.app.server.domain.facility.exception.code.FacilityErrorCode;
 import hansung.app.server.domain.facility.repository.FacilityRepository;
 import hansung.app.server.domain.reservation.dto.request.CreateReservationRequest;
 import hansung.app.server.domain.reservation.dto.response.MyReservationResponse;
+import hansung.app.server.domain.reservation.dto.response.SeatReservationResponse;
 import hansung.app.server.domain.reservation.entity.Reservation;
 import hansung.app.server.domain.reservation.exception.ReservationException;
 import hansung.app.server.domain.reservation.exception.code.ReservationErrorCode;
@@ -89,18 +90,24 @@ public class ReservationService {
     }
 
     // 현재 예약된 좌석들 가져오기
-    public List<Integer> getReservationSeats(String facilityId) throws ExecutionException, InterruptedException {
+    public List<SeatReservationResponse> getReservationSeats(String facilityId) throws ExecutionException, InterruptedException {
         try {
             List<Reservation> reservations = reservationRepository.findReservationsByFacilityId(facilityId);
             if (reservations == null) {
                 throw new ReservationException(ReservationErrorCode.RESERVATION_NOT_FOUND_EXCEPTION);
             }
 
-            List<Integer> reservedSeats = new ArrayList<>();
+            List<SeatReservationResponse> reservedSeats = new ArrayList<>();
             // "진행 중" 상태인 예약만 필터링
             for (Reservation reservation : reservations) {
                 if ("진행 중".equals(reservation.getStatus())) {
-                    reservedSeats.add(reservation.getSeatNumber()); // 예약된 좌석 번호 추가
+                    reservedSeats.add(SeatReservationResponse.builder()
+                            .facilityId(facilityId)
+                            .seatNumber(reservation.getSeatNumber())
+                            .startTime(reservation.getStartTime())
+                            .endTime(reservation.getEndTime())
+                            .active(reservation.isActive())
+                            .build());
                 }
             }
             return reservedSeats; // 예약된 좌석 번호 리스트 반환
